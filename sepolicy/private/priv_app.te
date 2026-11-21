@@ -1,0 +1,4 @@
+# Allow priv_app (com.dolby.daxservice) to find hal_dms and exchange binders
+allow priv_app hal_dms_hwservice:hwservice_manager find;
+binder_call(priv_app, hal_dms_default)
+allow priv_app hal_dms_default:fd use;

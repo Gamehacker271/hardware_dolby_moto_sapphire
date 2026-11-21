@@ -1,0 +1,5 @@
+on post-fs-data
+    mkdir /data/vendor/dolby 0770 media media
+
+on early-boot
+    mkdir /data/vendor/multimedia 0775 system system

@@ -1,0 +1,2 @@
+# Allow audioserver to act as client for hal_dms
+hal_client_domain(audioserver, hal_dms)

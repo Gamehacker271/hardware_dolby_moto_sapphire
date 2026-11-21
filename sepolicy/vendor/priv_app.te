@@ -1,0 +1,2 @@
+# Allow priv_app (com.dolby.daxservice, com.motorola.dolby.dolbyui) to act as a client for hal_dms
+hal_client_domain(priv_app, hal_dms)

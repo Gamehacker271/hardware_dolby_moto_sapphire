@@ -1,0 +1,587 @@
+//
+// Copyright (C) 2022 FlamingoOS Project
+// Copyright (C) 2023-2024 The LineageOS Project
+// Copyright (C) 2024-2025 Lunaris AOSP
+// Copyright (C) 2024-2026 Gamehac_RA (Motorola Dolby Port for Sapphire)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+soong_namespace {
+}
+
+// ============================================================================
+// Codec2 & Stagefright Shared Libraries
+// ============================================================================
+
+cc_prebuilt_library_shared {
+    name: "libcodec2_soft_ddpdec",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libstagefright_soft_ddpdec.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdeccfg", "libstagefright_foundation", "libcutils", "libbase", "liblog", "libutils", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libcodec2_soft_ddpdec.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdeccfg", "libstagefright_foundation", "libcodec2_soft_common", "libsfplugin_ccodec_utils", "libcutils", "libbase", "liblog", "libcodec2", "libcodec2_vndk", "libutils", "libcodec2_soft_dolby", "libcodec2_store_dolby", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libcodec2_soft_ac4dec",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libstagefright_soft_ac4dec.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdeccfg", "libstagefright_foundation", "libcutils", "libbase", "liblog", "libutils", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libcodec2_soft_ac4dec.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdeccfg", "libstagefright_foundation", "libcodec2_soft_common", "libcutils", "libbase", "liblog", "libcodec2", "libcodec2_vndk", "libutils", "libsfplugin_ccodec_utils", "libcodec2_soft_dolby", "libcodec2_store_dolby", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libcodec2_store_dolby",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libcodec2_store_dolby.so"],
+            shared_libs: ["libbase", "liblog", "libcodec2", "libcodec2_vndk", "libdmabufheap", "libutils", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libcodec2_soft_dolby",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libcodec2_soft_dolby.so"],
+            shared_libs: ["libbase", "libcodec2", "libcodec2_vndk", "libutils", "libcutils", "liblog", "libstagefright_foundation-v33", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libstagefrightdolby",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libstagefrightdolby.so"],
+            shared_libs: ["libstagefright_fdtn_dolby", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libstagefrightdolby.so"],
+            shared_libs: ["libstagefright_fdtn_dolby", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libstagefright_fdtn_dolby",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libstagefright_fdtn_dolby.so"],
+            shared_libs: ["libbinder", "libutils", "libcutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libstagefright_fdtn_dolby.so"],
+            shared_libs: ["libbinder", "libutils", "libcutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+// ============================================================================
+// Dolby Atmos Parameter Storage & Configs
+// ============================================================================
+
+cc_prebuilt_library_shared {
+    name: "libdapparamstorage",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libdapparamstorage.so"],
+            shared_libs: ["libcutils", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libdapparamstorage.so"],
+            shared_libs: ["libcutils", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libdeccfg",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libdeccfg.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdapparamstorage", "libcutils", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libdeccfg.so"],
+            shared_libs: ["libhidlbase", "vendor.dolby.hardware.dms@2.0", "libdapparamstorage", "libcutils", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libdlbdsservice",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libdlbdsservice.so"],
+            shared_libs: ["libutils", "libcutils", "libstagefright_foundation", "liblog", "libxml2", "libcrypto", "libdapparamstorage", "libsqlite", "libhidlbase", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libdlbpreg",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libdlbpreg.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libstagefright_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libdlbpreg.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libstagefright_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libspatializerparamstorage",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libspatializerparamstorage.so"],
+            shared_libs: ["libcutils", "libutils", "liblog", "libxml2", "libdapparamstorage", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libswspatializer_ext",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libswspatializer_ext.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libspatializerparamstorage", "libhidlbase", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "liboem_specific",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/liboem_specific.so"],
+            shared_libs: ["libcutils", "libutils", "liblog", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+// ============================================================================
+// Motorola Smart Sound (Moto SST) & Audio Algorithm Foundation
+// ============================================================================
+
+cc_prebuilt_library_shared {
+    name: "libaualgo_foundation",
+    owner: "motorola",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libaualgo_foundation.so"],
+            shared_libs: ["libaudioutils", "liblog", "libcutils", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libaualgo_foundation.so"],
+            shared_libs: ["libaudioutils", "liblog", "libcutils", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libaualgo_sst_component",
+    owner: "motorola",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libaualgo_sst_component.so"],
+            shared_libs: ["libaudioutils", "liblog", "libcutils", "libaualgo_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libaualgo_sst_component.so"],
+            shared_libs: ["libaudioutils", "liblog", "libcutils", "libaualgo_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+// ============================================================================
+// Audio Effects (soundfx)
+// ============================================================================
+
+cc_prebuilt_library_shared {
+    name: "libmsstwrapper",
+    owner: "motorola",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/soundfx/libmsstwrapper.so"],
+            shared_libs: ["libaudioutils", "libcutils", "liblog", "libaualgo_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libmsstwrapper.so"],
+            shared_libs: ["libaudioutils", "libcutils", "liblog", "libaualgo_foundation", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libdlbvol",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/soundfx/libdlbvol.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libdlbvol.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libswdap",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/soundfx/libswdap.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libhidlbase", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libswdap.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libspatializerparamstorage", "libhidlbase", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libhwdap",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libhwdap.so"],
+            shared_libs: ["libspatializerparamstorage", "liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libhidlbase", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libstagefright_foundation-v33", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libswgamedap",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/soundfx/libswgamedap.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libhidlbase", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libswgamedap.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libspatializerparamstorage", "libhidlbase", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libswspatializer",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libswspatializer.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libspatializerparamstorage", "libhidlbase", "libstagefright_foundation", "libdlbpreg", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libswvqe",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/soundfx/libswvqe.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libhidlbase", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/soundfx/libswvqe.so"],
+            shared_libs: ["liblog", "libutils", "libcutils", "libaudioutils", "libdapparamstorage", "libspatializerparamstorage", "libhidlbase", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+// ============================================================================
+// Dolby DMS HIDL HAL Interface & Services
+// ============================================================================
+
+cc_prebuilt_library_shared {
+    name: "vendor.dolby.hardware.dms@2.0-impl",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/vendor.dolby.hardware.dms@2.0-impl.so"],
+            shared_libs: ["libhidlbase", "libutils", "liblog", "libdapparamstorage", "libdlbdsservice", "vendor.dolby.hardware.dms@2.0", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "vendor.dolby.hardware.dms@2.0",
+    owner: "dolby",
+    strip: { none: true },
+    target: {
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/vendor.dolby.hardware.dms@2.0.so"],
+            shared_libs: ["libhidlbase", "liblog", "libutils", "libcutils", "libc++", "libc", "libm", "libdl"],
+        },
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/vendor.dolby.hardware.dms@2.0.so"],
+            shared_libs: ["libhidlbase", "liblog", "libutils", "libcutils", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "both",
+    prefer: true,
+    soc_specific: true,
+}
+
+cc_prebuilt_binary {
+    name: "vendor.dolby.hardware.dms@2.0-service",
+    owner: "dolby",
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/bin/hw/vendor.dolby.hardware.dms@2.0-service"],
+            shared_libs: ["libstagefright_foundation-v33", "liblog", "libutils", "libhidlbase", "libdapparamstorage", "libdlbdsservice", "vendor.dolby.hardware.dms@2.0", "vendor.dolby.hardware.dms@2.0-impl", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    strip: { none: true },
+    prefer: true,
+    relative_install_path: "hw",
+    soc_specific: true,
+}
+
+cc_prebuilt_binary {
+    name: "vendor.dolby.media.c2@1.0-service",
+    owner: "dolby",
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/bin/hw/vendor.dolby.media.c2@1.0-service"],
+            shared_libs: ["libbase", "liblog", "libcodec2", "libutils", "android.hardware.media.c2@1.0", "android.hardware.media.c2@1.1", "android.hardware.media.c2@1.2", "libcodec2_hidl@1.0", "libcodec2_hidl@1.1", "libcodec2_hidl@1.2", "libcodec2_vndk", "libhidlbase", "libavservices_minijail", "libbinder", "libcodec2_store_dolby", "libc++", "libc", "libm", "libdl"],
+        },
+    },
+    compile_multilib: "64",
+    strip: { none: true },
+    prefer: true,
+    relative_install_path: "hw",
+    soc_specific: true,
+}
+
+// ============================================================================
+// System Applications & Services
+// ============================================================================
+
+android_app_import {
+    name: "MotoDolbyDax3",
+    owner: "motorola",
+    apk: "proprietary/system/priv-app/MotoDolbyDax3/MotoDolbyDax3.apk",
+    certificate: "platform",
+    dex_preopt: {
+        enabled: false,
+    },
+    privileged: true,
+}
+
+android_app_import {
+    name: "daxService",
+    owner: "dolby",
+    apk: "proprietary/system/priv-app/daxService/daxService.apk",
+    certificate: "platform",
+    dex_preopt: {
+        enabled: false,
+    },
+    privileged: true,
+}
+
+android_app_import {
+    name: "MotorolaSettingsProvider",
+    owner: "motorola",
+    apk: "proprietary/system/priv-app/MotorolaSettingsProvider/MotorolaSettingsProvider.apk",
+    certificate: "platform",
+    dex_preopt: {
+        enabled: false,
+    },
+    privileged: true,
+}
+
+android_app_import {
+    name: "MotoSignatureApp",
+    owner: "motorola",
+    apk: "proprietary/system/app/MotoSignatureApp/MotoSignatureApp.apk",
+    certificate: "platform",
+    dex_preopt: {
+        enabled: false,
+    },
+}
+
+// ============================================================================
+// Motorola Framework Libraries
+// ============================================================================
+
+java_import {
+    name: "moto",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/moto.jar"],
+}
+
+java_import {
+    name: "moto-core_services",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/moto-core_services.jar"],
+}
+
+java_import {
+    name: "moto-settings",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/moto-settings.jar"],
+}
+
+java_import {
+    name: "moto-checkin",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/moto-checkin.jar"],
+}
+
+java_import {
+    name: "com.motorola.motosignature",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/com.motorola.motosignature.jar"],
+}
+
+java_import {
+    name: "com.motorola.frameworks.core.addon",
+    owner: "motorola",
+    jars: ["proprietary/system/framework/com.motorola.frameworks.core.addon.jar"],
+}
