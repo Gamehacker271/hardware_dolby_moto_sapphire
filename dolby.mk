@@ -47,6 +47,7 @@ PRODUCT_PACKAGES += \
 
 # Configs & Tuning Profiles (SM6225 10-Profile DAX + Moto SST)
 PRODUCT_COPY_FILES += \
+    $(DOLBY_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(DOLBY_PATH)/configs/dax/dax-default.xml:$(TARGET_COPY_OUT_VENDOR)/etc/dolby/dax-default.xml \
     $(DOLBY_PATH)/configs/aualgo/aualgo_sst.conf:$(TARGET_COPY_OUT_VENDOR)/etc/aualgo/aualgo_sst.conf \
     $(DOLBY_PATH)/configs/media/media_codecs_dolby_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_dolby_audio.xml \

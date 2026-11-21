@@ -9,7 +9,7 @@
 
 A complete, production-grade AOSP hardware tree component for compiling **Motorola Dolby Atmos (DAX3) and Motorola Spatial Sound (Moto SST)** natively into custom ROMs (LineageOS, PixelOS, crDroid, EvolutionX, Paranoid Android, etc.) for the **Xiaomi Redmi Note 13 4G / 4G NFC** (`sapphire` / `sapphiren`).
 
-Based on and adapted from the [ximi685-ad-development/hardware_dolby_new](https://github.com/ximi685-ad-development/hardware_dolby_new) AOSP architecture.
+Based on and adapted from the [ximi685-ad-development/hardware_dolby_new](https://github.com/ximi685-ad-development/hardware_dolby_new) AOSP architecture, featuring the official Motorola Dolby UI (`MotoDolbyDax3`) and automatic build-time audio effects configuration.
 
 ---
 
@@ -21,6 +21,8 @@ hardware/dolby/
 ├── dolby.mk                                   # Product makefile to inherit in device.mk
 ├── README.md                                  # Integration & documentation guide
 ├── configs/
+│   ├── audio/
+│   │   └── audio_effects.xml                  # Pre-configured audio effects XML for Sapphire SM6225
 │   ├── aualgo/
 │   │   └── aualgo_sst.conf                    # Motorola Smart Sound DSP configuration
 │   ├── dax/
@@ -32,7 +34,7 @@ hardware/dolby/
 │       ├── vendor.dolby.hardware.dms@2.0-service.xml
 │       └── vendor.dolby.media.c2@1.0-service.xml
 ├── proprietary/
-│   ├── system/                                # Motorola UI, DaxService, framework JARs & permissions
+│   ├── system/                                # Official Motorola UI, DaxService & Framework JARs
 │   │   ├── app/MotoSignatureApp/
 │   │   ├── priv-app/
 │   │   │   ├── daxService/
@@ -72,10 +74,10 @@ hardware/dolby/
 
 ### 1. Clone into ROM Source Tree
 
-Clone this repository into `hardware/dolby` inside your ROM source root:
+Clone this repository into `hardware/dolby` inside your ROM source tree:
 
 ```bash
-git clone <this-repo-url> hardware/dolby
+git clone https://github.com/Gamehacker271/hardware_dolby_moto_sapphire.git hardware/dolby
 ```
 
 *(Note: If you place it under a different path such as `hardware/motorola/dolby`, specify `DOLBY_PATH := hardware/motorola/dolby` before inheriting `dolby.mk`).*
@@ -102,7 +104,7 @@ $(call inherit-product, hardware/dolby/dolby.mk)
 
 ### 3. VINTF Configuration in `BoardConfig.mk`
 
-Ensure manifest and compatibility matrix fragments are appended using `+=`:
+Ensure manifest and compatibility matrix fragments are appended using `+=` in `BoardConfig.mk`:
 
 ```makefile
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
@@ -115,64 +117,25 @@ DEVICE_MANIFEST_FILE += \
 
 ---
 
-### 4. Audio Effects Configuration (`audio_effects.xml`)
+### 4. Automatic Audio Effects Configuration (`audio_effects.xml`)
 
-Edit your device's `audio_effects.xml` (typically in `device/xiaomi/sapphire/audio/audio_effects.xml`).
+> ⚡ **Zero Manual Editing Needed:**  
+> `dolby.mk` automatically deploys the pre-configured, tested `audio_effects.xml` directly to `$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml` during the compilation of your ROM.
 
-> [!CRITICAL]
-> **REGLAS DE ORO DE AUDIO EFFECTS:**
-> 1. **NUNCA** coloques `<apply effect="dap_mod"/>` dentro de `<postprocess>`. Si lo haces, `audioserver` tomará `Ctrl=yes` en la Sesión 0 y dejará a `daxservice` con `Ctrl=no` (ecualizador roto que se mueve pero no cambia el sonido).
-> 2. **Tipos de Stream Compatibles con SM6225:** Utiliza únicamente `music`, `ring`, `alarm`, `notification`. No añadas `patch`, `accessibility` o `rerouting` ya que el parser del HAL (`EffectsConfig`) fallará.
+If your device tree (`device/xiaomi/sapphire`) already has a line in `device.mk` copying an `audio_effects.xml`, simply **comment out or remove** that line:
 
-#### A. Declare Libraries:
-```xml
-    <libraries>
-        <!-- Dolby Atmos & Moto Sound FX -->
-        <library name="moto_sst" path="libmsstwrapper.so"/>
-        <library name="dvl" path="libdlbvol.so"/>
-        <library name="gamedap_mod" path="libswgamedap.so"/>
-        <library name="vqe_mod" path="libswvqe.so"/>
-        <library name="dap_mod" path="libswdap.so"/>
-    </libraries>
+```makefile
+# Remove or comment out any old device audio_effects.xml copy line:
+# PRODUCT_COPY_FILES += $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml
 ```
 
-#### B. Declare Effects:
-```xml
-    <effects>
-        <!-- Dolby Atmos & Moto Sound Effects -->
-        <effect name="moto_sst" library="moto_sst" uuid="01325f27-2882-44f7-bdec-e7ce4ea3a581"/>
-        <effect name="dvl_notification" library="dvl" uuid="1f0091e3-6ad8-40fe-9b09-5948f9a26e7e"/>
-        <effect name="dvl_system" library="dvl" uuid="874db4d8-051d-4b7b-bd95-a3bebc837e9e"/>
-        <effect name="dvl_alarm" library="dvl" uuid="6aff229c-30c6-4cc8-9957-dbfe5c1bd7f6"/>
-        <effect name="dvl_ring" library="dvl" uuid="21d14087-558a-4f21-94a9-5002dce64bce"/>
-        <effect name="dvl_music" library="dvl" uuid="40f66c8b-5aa5-4345-8919-53ec431aaa98"/>
-        <effect name="gamedap_mod" library="gamedap_mod" uuid="3783c334-d3a0-4d13-874f-0032e5fb80e2"/>
-        <effect name="vqe_mod" library="vqe_mod" uuid="64a0f614-7fa4-48b8-b081-d59dc954616f"/>
-        <effect name="dap_mod" library="dap_mod" uuid="9d4921da-8225-4f29-aefa-39537a04bcaa"/>
-    </effects>
-```
-
-#### C. Postprocess:
-```xml
-    <postprocess>
-        <stream type="music">
-            <apply effect="moto_sst"/>
-            <apply effect="dvl_music"/>
-        </stream>
-        <stream type="ring">
-            <apply effect="moto_sst"/>
-            <apply effect="dvl_ring"/>
-        </stream>
-        <stream type="alarm">
-            <apply effect="moto_sst"/>
-            <apply effect="dvl_alarm"/>
-        </stream>
-        <stream type="notification">
-            <apply effect="moto_sst"/>
-            <apply effect="dvl_notification"/>
-        </stream>
-    </postprocess>
-```
+#### Why is this configuration critical for Snapdragon 685 (SM6225)?
+1. **Exclusive AudioFlinger Control (`Ctrl=yes`):**  
+   `<apply effect="dap_mod"/>` is intentionally **omitted** from `<postprocess>`. This prevents `audioserver` from stealing `Ctrl=yes` on Session 0 at boot, guaranteeing that `daxservice` gets exclusive control and real-time equalizer manipulation works properly.
+2. **Qualcomm HAL Stream Compatibility:**  
+   Postprocess only binds to valid Qualcomm SM6225 streams (`music`, `ring`, `alarm`, `notification`). Modern generic AOSP stream tags (`patch`, `accessibility`, `call_assistant`) are excluded to prevent `EffectsConfig` parser crashes.
+3. **Motorola Spatial Sound (Moto SST):**  
+   `moto_sst` (UUID `01325f27-2882-44f7-bdec-e7ce4ea3a581`) is bound to all output streams alongside Dolby Volume Listeners (`dvl_*`), enabling seamless spatializer switching.
 
 ---
 
@@ -186,7 +149,7 @@ Include the Dolby Codec2 XML in your vendor `media_codecs.xml`:
 
 ---
 
-## 🔬 Breakthrough Technical Solutions Included in this Tree
+## 🔬 Key Breakthroughs Built into this Tree
 
 | Issue / Bug | Root Cause | Solution in this Tree |
 | :--- | :--- | :--- |
